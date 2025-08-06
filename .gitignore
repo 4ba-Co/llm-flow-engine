@@ -27,3 +27,6 @@
 *.pid
 dist/
 build/
+
+# claude code
+.claude/
