@@ -228,7 +228,7 @@ def test_project_structure():
         "examples/demo_example.py",
         "examples/demo_qa.yaml",
         "README.md",
-        "requirements.txt"
+        "pyproject.toml"
     ]
     
     missing_files = []

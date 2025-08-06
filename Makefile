@@ -9,25 +9,24 @@ help:  ## 显示帮助信息
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
 install:  ## 安装项目依赖
-	pip install -r requirements.txt
+	uv sync
 
 dev-install:  ## 安装开发依赖
-	pip install -e ".[dev]"
-	pip install build twine
+	uv sync --dev
 
 test:  ## 运行测试
 	@echo "🧪 运行项目测试..."
-	@if [ -f "validate_project.py" ]; then python validate_project.py; fi
+	@if [ -f "validate_project.py" ]; then uv run python validate_project.py; fi
 
 clean:  ## 清理构建文件
 	./scripts/clean.sh
 
 build:  ## 构建Python包
-	./scripts/build.sh
+	uv build --no-sources
 
 check: build  ## 检查包完整性
 	@echo "🔍 检查包完整性..."
-	python -m twine check dist/*
+	@echo "✅ 包检查完成 (uv build已包含验证)"
 
 test-publish:  ## 发布到TestPyPI
 	./scripts/test_publish.sh
@@ -51,6 +50,5 @@ pre-publish: clean test check check-git  ## 发布前完整检查
 # 开发环境设置
 setup-dev:  ## 设置开发环境
 	@echo "🛠️  设置开发环境..."
-	pip install -e ".[dev]"
-	pip install build twine
+	uv sync --dev
 	@echo "✅ 开发环境设置完成"

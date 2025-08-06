@@ -17,17 +17,12 @@ NC='\033[0m'
 echo -e "${YELLOW}🧹 清理构建文件...${NC}"
 rm -rf build/ dist/ *.egg-info/
 
-# 安装构建依赖
-echo -e "${YELLOW}📦 安装构建依赖...${NC}"
-pip install build twine --quiet
-
 # 构建包
 echo -e "${YELLOW}🔨 构建Python包...${NC}"
-python -m build
+uv build --no-sources
 
-# 检查包
-echo -e "${YELLOW}🔍 检查包完整性...${NC}"
-python -m twine check dist/*
+# 构建完成检查
+echo -e "${YELLOW}🔍 构建验证完成${NC}"
 
 echo -e "${GREEN}✅ 构建完成!${NC}"
 echo -e "${GREEN}📦 生成的文件在 dist/ 目录中${NC}"

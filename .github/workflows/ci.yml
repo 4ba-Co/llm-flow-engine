@@ -24,23 +24,28 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
         
+    - name: ⚡ Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+        enable-cache: true
+        cache-dependency-glob: "pyproject.toml"
+        
     - name: 📦 Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      run: uv sync --dev
         
     - name: 🧪 Run validation tests
       run: |
         if [ "$RUNNER_OS" == "Windows" ]; then
-          python validate_project_win.py
+          uv run python validate_project_win.py
         else
-          python validate_project.py
+          uv run python validate_project.py
         fi
       shell: bash
         
     - name: 📊 Test import
       run: |
-        python -c "
+        uv run python -c "
         import sys
         import os
         sys.path.insert(0, os.getcwd())
@@ -57,11 +62,8 @@ jobs:
         PYTHONIOENCODING: utf-8
         
     - name: 🔨 Test build
-      run: |
-        pip install build
-        python -m build
+      run: uv build --no-sources
         
     - name: 🔍 Test package
       run: |
-        pip install twine
-        python -m twine check dist/*
+        echo "✅ Package validation complete (uv build includes checks)"

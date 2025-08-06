@@ -21,7 +21,7 @@ if [ ! -d "dist" ] || [ -z "$(ls -A dist/)" ]; then
 fi
 
 # 获取版本号
-VERSION=$(python -c "
+VERSION=$(uv run python -c "
 import re
 with open('pyproject.toml', 'r') as f:
     content = f.read()
@@ -42,7 +42,7 @@ fi
 
 # 上传到PyPI
 echo -e "${YELLOW}🚀 上传到 PyPI...${NC}"
-python -m twine upload dist/*
+uv publish
 
 echo -e "${GREEN}✅ 发布成功!${NC}"
 echo -e "${GREEN}🎉 版本 ${VERSION} 已发布到 PyPI${NC}"

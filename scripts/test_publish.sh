@@ -21,7 +21,7 @@ if [ ! -d "dist" ] || [ -z "$(ls -A dist/)" ]; then
 fi
 
 # 获取版本号
-VERSION=$(python -c "
+VERSION=$(uv run python -c "
 import re
 with open('pyproject.toml', 'r') as f:
     content = f.read()
@@ -34,7 +34,7 @@ echo -e "${GREEN}📋 测试发布版本: ${VERSION}${NC}"
 
 # 上传到TestPyPI
 echo -e "${YELLOW}🚀 上传到 TestPyPI...${NC}"
-python -m twine upload --repository testpypi dist/*
+uv publish --index testpypi
 
 echo -e "${GREEN}✅ TestPyPI 上传成功!${NC}"
 echo -e "${GREEN}🔗 TestPyPI 链接: https://test.pypi.org/project/llm-flow-engine/${VERSION}/${NC}"
